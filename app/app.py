@@ -8,6 +8,7 @@ applog = app_logger.make_logger("MAIN APP")
 applog.debug(f"Attempting to create a FastAPI instance obj.")
 try:
     ep_app = ep_server.init_app()
+    
 except Exception as e:
     applog.error(f"Could not create FastAPI instance.")
     ep_app = None

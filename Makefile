@@ -1,52 +1,59 @@
 APP_NAME= wending_machine
+APP_USER_NAME=app_user
 
 IMG_NAME = kvilenczi/img_python_app_$(APP_NAME):latest
 CONT_NAME = cont_python_app_$(APP_NAME)
 
-
+# Build 
 build:
-	docker build -t $(IMG_NAME) .
+	docker build \
+	--build-arg GROUP_ID=$$(id -g) \
+	--build-arg USER_ID=$$(id -u) \
+	--build-arg USER_NAME=$(APP_USER_NAME) -t $(IMG_NAME) . 
+
+# Runners
+run_rm_it_ep:
+	docker run -it --rm --network host \
+	--name $(CONT_NAME) \
+	--mount type=bind,source=$$(pwd)/app,target=/home/$(APP_USER_NAME)/app \
+	$(IMG_NAME) /bin/bash -c "uvicorn app:ep_app --host 127.0.0.1 --port 8000 --log-level debug --use-colors --reload"
+
+
+run_rm_d_app:
+	docker run -d --rm --network host --name $(CONT_NAME) --mount type=bind,source=$$(pwd)/app,target=/app $(IMG_NAME)
+
+run_rm_it_app:
+	docker run -it --rm --network host \
+	--name $(CONT_NAME) \
+	--mount type=bind,source=$$(pwd)/app,target=/home/$(APP_USER_NAME)/app \
+	$(IMG_NAME) /bin/bash -c "python app.py"
+
+run_rm_it_bash:
+	docker run -it --rm --network host \
+	--name $(CONT_NAME) \
+	--mount type=bind,source=$$(pwd)/app,target=/home/$(APP_USER_NAME)/app \
+	$(IMG_NAME) /bin/bash
 
 # Checks
-run_black:
-	docker exec -it $(CONT_NAME) black /app
-
 run_mypy:
-	docker exec -it $(CONT_NAME) mypy --show-column-numbers --explicit-package-bases /app
+	docker exec -it $(CONT_NAME) mypy --show-column-numbers --explicit-package-bases .
 
-# to run this run (e.g.) run_rm_it_bash before to have the container up and running
+run_black:
+	docker exec -it $(CONT_NAME) python -m black .
+
 run_checks: run_black run_mypy
 
 # Tests
 run_pytest:
-	docker exec -it $(CONT_NAME) pytest -v -s
+	docker exec -it $(CONT_NAME) python -m pytest -v -s
 
 
-# Runners
-run_rm_d_app:
-	docker run -d --rm --network host --name $(CONT_NAME) \
-	--mount type=bind,source=$$(pwd)/app,target=/app \
-	--mount type=bind,source=$$(pwd)/app/docs,target=/app/docs \
-	$(IMG_NAME)
+run_coverage:
+	docker exec -it $(CONT_NAME) python -m pytest -v -s --cov=app
 
-run_rm_it_app:
-	docker run -it --rm --network host --name $(CONT_NAME) \
-	--mount type=bind,source=$$(pwd)/app,target=/app \
-	--mount type=bind,source=$$(pwd)/app/docs,target=/app/docs \
-	$(IMG_NAME) /bin/bash -c "python app.py"
 
-run_rm_it_bash:
-	docker run -it --rm --network host --name $(CONT_NAME) \
-	--mount type=bind,source=$$(pwd)/app,target=/app \
-	--mount type=bind,source=$$(pwd)/app/docs,target=/app/docs \
-	$(IMG_NAME) /bin/bash
-
-run_rm_it_ep:
-	docker run -it --rm --network host --name $(CONT_NAME) \
-	--mount type=bind,source=$$(pwd)/app,target=/app \
-	--mount type=bind,source=$$(pwd)/app/docs,target=/app/docs \
-	$(IMG_NAME) /bin/bash -c "uvicorn app:ep_app --host 127.0.0.1 --port 8000 --log-level debug --use-colors --reload"
-
+run_tox:
+	docker exec -it $(CONT_NAME) python -m tox
 
 # Utility commands
 stop:
@@ -72,3 +79,31 @@ push:
 
 prune:
 	docker system prune --all -f
+
+prune_img:
+	docker image prune -f
+
+prune_vol:
+	docker volume prune -f
+
+prune_net:
+	docker network prune -f
+
+purge: prune prune_img
+
+
+# Some cleaners
+clean_build: ## remove build artifacts
+	rm -fr build/
+	rm -fr dist/
+	rm -fr .eggs/
+	find . -name '*.egg-info' -name '*.egg' -exec rm -f {} +
+
+clean_pyc: ## remove Python file artifacts
+	find . -name '*.pyc' -name '*.pyo' -name '*~' -name '__pycache__' -exec rm -f {} +
+	find . -type d -name '.mypy_cache' -exec rm -rf {} +
+
+
+clean_test: ## remove test and coverage artifacts
+	find . -name '.pytest_cache' -name '.tox' -name '.coverage' -exec rm -f {} +
+	

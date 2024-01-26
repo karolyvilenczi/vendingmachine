@@ -28,12 +28,12 @@ def init_app():
     # TODO: add try-c parts to handle exceptions
     app = FastAPI(
         # TODO: move to ext. config
-        title="Fastapi Template APP",  # FIX
-        description="Description of...",  # FIX
+        title="Wending machine app",  # FIX
+        description="Part of the interview process for Oliver Wynman",  # FIX
         version="0.0.1",
         terms_of_service="http://example.com/terms/",  # FIX
         contact={
-            "name": "The Amazing local team of me",
+            "name": "Charles Vilenczi",
             "url": "my url",  # FIX
             "email": "mail@mail.com",  # FIX
         },
@@ -43,7 +43,7 @@ def init_app():
         },
     )
     # TODO: make conditional from env
-    applog.debug(f"FastAPI obj created: {app}")
+    applog.debug(f"FastAPI main instance created: {app}")
 
     # adding prometheus
     app.add_middleware(PrometheusMiddleware)
