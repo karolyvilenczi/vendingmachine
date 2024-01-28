@@ -1,26 +1,15 @@
-# system imports
 from typing import Optional
-
-# 3rd party imports
 from fastapi import FastAPI
-
 # fastapi cors support
 from fastapi.middleware.cors import CORSMiddleware
-
 # to integrate with prometheus monitoring
 from starlette_prometheus import metrics, PrometheusMiddleware
 
-# local imports (using absolute path notation)
 from busapp.epserver.ep_routes import (
     r_users,
 )
 
-from busapp.apputils import app_logger
-
-
-# --------------------------------------------------------------
-applog = app_logger.make_logger("EP SERVER")
-
+from busapp.apputils.app_logger import applog
 
 # --------------------------------------------------------------
 def init_app():

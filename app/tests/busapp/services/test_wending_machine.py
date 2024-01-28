@@ -4,11 +4,11 @@ import inspect
 
 import pytest
 
-from busapp.apputils import app_logger
+# from busapp.apputils import app_logger
 from busapp.services.wending_machine import VendingMachine, Item
 
 # ------------------------------------------------------
-applog = app_logger.make_logger("TEST:WENDING MACHINE")
+from busapp.apputils.app_logger import applog
 
 
 @pytest.fixture(scope="session")

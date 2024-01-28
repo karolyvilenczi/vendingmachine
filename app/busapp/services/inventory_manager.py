@@ -5,10 +5,9 @@ Module to implement the inventory management functions
 from pydantic import BaseModel
 from typing import List
 
-from busapp.apputils import app_logger
+from busapp.apputils.app_logger import applog
 
 # ------------------------------------------------------
-applog = app_logger.make_logger("SRV:INVENTORY MANAGER")
 
 
 class Item(BaseModel):

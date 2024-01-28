@@ -5,14 +5,12 @@ Module to implement the actual wending machine logic.
 from pydantic import BaseModel
 from typing import List
 
-from busapp.apputils import app_logger
-
 import inventory_manager as im
 import money_manager as mm
 import user_manager as um
 
+from busapp.apputils.app_logger import applog
 # ------------------------------------------------------
-applog = app_logger.make_logger("SRV:WENDING MACHINE")
 
 
 class VendingMachine:

@@ -1,8 +1,7 @@
-from busapp.apputils import app_logger
+# from busapp.apputils import app_logger
 from busapp.epserver import ep_server
+from busapp.apputils.app_logger import applog
 
-# ---------------------------------------------------------------
-applog = app_logger.make_logger("MAIN APP")
 
 # ---------------------------------------------------------------
 applog.debug(f"Attempting to create a FastAPI instance obj.")

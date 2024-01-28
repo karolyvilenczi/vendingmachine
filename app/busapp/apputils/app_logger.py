@@ -1,29 +1,16 @@
 """
-An app wide logger module
-TODO: replace with loguru
+Set up loguru logger
+
 """
 
-import logging
+from loguru import logger as applog
+import sys
 
+applog.remove(0) # remove the default handler configuration
 
-def make_logger(logger_name="APP LOGGER"):
-    # create logger
-    logger = logging.getLogger(logger_name)
-    logger.setLevel(logging.DEBUG)
-
-    # create console handler and set level to debug
-    ch = logging.StreamHandler()
-    ch.setLevel(logging.DEBUG)
-
-    # create formatter
-    formatter = logging.Formatter(
-        ">>> %(asctime)s - %(name)s - %(levelname)s - %(message)s <<<"
-    )
-
-    # add formatter to ch
-    ch.setFormatter(formatter)
-
-    # add ch to logger
-    logger.addHandler(ch)
-
-    return logger
+LOG_LEVEL = "DEBUG"
+FILE_NAME="app.log"
+log_format = "<green>{time:YYYY-MM-DD HH:mm:ss.SSS zz}</green> | <level>{level: <8}</level> | <yellow>Line {line: >4} ({file}):</yellow> <b>{message}</b>"
+applog.add(sys.stderr, level=LOG_LEVEL, format=log_format, colorize=True, backtrace=True, diagnose=True)
+# TODO: reactivate once done
+# applog.add(FILE_NAME, level=LOG_LEVEL, format=log_format, colorize=False, backtrace=True, diagnose=True)

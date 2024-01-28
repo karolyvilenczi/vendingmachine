@@ -4,11 +4,11 @@ import inspect
 
 import pytest
 
-from busapp.apputils import app_logger
+# from busapp.apputils import app_logger
 from busapp.services import user_management
 
 # ------------------------------------------------------
-applog = app_logger.make_logger("TEST USER MANAGEMENT")
+from busapp.apputils.app_logger import applog
 
 
 # ------------------------------------------------------

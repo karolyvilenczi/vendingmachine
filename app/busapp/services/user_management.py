@@ -2,10 +2,7 @@
 Module to ...
 """
 
-from busapp.apputils import app_logger
-
-# ------------------------------------------------------
-applog = app_logger.make_logger("USER MANAGEMENT")
+from busapp.apputils.app_logger import applog
 
 
 # ------------------------------------------------------

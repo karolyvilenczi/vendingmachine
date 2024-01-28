@@ -2,10 +2,7 @@
 Module to implement the user management functions.
 """
 
-from busapp.apputils import app_logger
-
-# ------------------------------------------------------
-applog = app_logger.make_logger("SRV: USER MANAGEMENT")
+from busapp.apputils.app_logger import applog
 
 
 # ------------------------------------------------------
