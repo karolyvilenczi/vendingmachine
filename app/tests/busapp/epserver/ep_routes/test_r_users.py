@@ -67,5 +67,3 @@ def test_delete_user(test_user_w_id):
     
     assert response.json() == expected_data
     assert test_user_w_id not in crud_service_user.get_database_in_dict()
-
-

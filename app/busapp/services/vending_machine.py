@@ -18,10 +18,10 @@ from busapp.apputils.app_logger import applog
 
 
 class States(enum.Enum):
-    READY = 1
-    MAINTENANCE = 2
-    SELLING = 3
-    DAMAGED = 10
+    READY = "ready"
+    MAINTENANCE = "maintenance"
+    SELLING = "selling"
+    DAMAGED = "damaged"
 
 class VendingMachine(Machine):
     def __init__(self):        
@@ -49,7 +49,7 @@ class VendingMachine(Machine):
     def machine_initial_setup(
             self, 
             funds=100, # TODO: add coin management,now this is just funds
-            inventory = 20
+            inventory = 20 #TODO get this from inventory mgmt
         ):
         self.funds = funds
         self.inventory = inventory
@@ -82,11 +82,13 @@ class VendingMachine(Machine):
         # return True if all(init_checklist) else False
         return True
 
-
-           
+         
     def get_current_funds(self): 
         return f"Current funds: {self.funds}"
 
+
+    def get_current_state(self): 
+        return self.get_model_state()
 
 
 

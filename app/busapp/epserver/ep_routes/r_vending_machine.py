@@ -3,21 +3,50 @@ Module to implement routes using the services/wending_machine.py
 """
 
 from fastapi import APIRouter
-from busapp.apputils.app_logger import applog
+from fastapi import HTTPException
+from pydantic import BaseModel
 
-from busapp.services.vending_machine import VendingMachine
+from busapp.apputils.app_logger import applog
+from busapp.services.vending_machine import VendingMachine, States
+
+from pprint import pprint as pp
 
 # ------------------------------------------------------
 vm = VendingMachine()
-vm.turn_key_to_ready()
-
+ 
+class MachineState(BaseModel):
+    desired_state: str
+    
 router_vm = APIRouter()
 
 
-
 # ------------------------------------------------------
-@router_vm.get("/funds")
-def fetch_items():
-    applog.debug("Fetching funds")
-    result = vm.get_current_funds()
-    return result
+@router_vm.post("/state")
+async def set_state(state:MachineState):
+    
+    if (state.desired_state == States.READY.value):
+        try:
+            vm.turn_key_to_ready()
+        except Exception as e:
+            err_msg = f"Could not turn on machine on: {e}"
+            applog.error(err_msg)
+            raise HTTPException(status_code=500, detail=err_msg)
+
+    if (state.desired_state == States.MAINTENANCE.value):    
+        try:
+            vm.turn_key_to_maintenance()
+        except Exception as e:
+            err_msg = f"Could not go to maintenance mode: {e}"
+            applog.error(err_msg)
+            raise HTTPException(status_code=500, detail=err_msg)
+        
+    return {"state":vm.state.value}
+
+
+# @router_users.post("/users/", response_model=User)
+# async def create_user(userwoid: UserWoId):
+#     return crud_service_user.create(userwoid)
+
+# @router_vm.post("/machine/state/")
+# async def change_state_to(desired_state:str):
+    
