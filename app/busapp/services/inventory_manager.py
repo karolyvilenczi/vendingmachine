@@ -2,7 +2,7 @@
 Module to implement the inventory management functions
 """
 from dataclasses import dataclass
-from pydantic import BaseModel
+from pydantic import BaseModel, field_validator
 from typing import List
 
 from busapp.apputils.app_logger import applog
@@ -13,8 +13,16 @@ class Product(BaseModel):
     id: int    
     productName: str
     amountAvailable: int
-    cost: float # TODO:  (should be in multiples of 5)
+    cost: int
 
+    @field_validator('cost')
+    @classmethod
+    def cost_must_be_a_multiple_of_5(cls, value:int) -> int:
+        if value % 5 != 0:
+            raise ValueError("Product cost must be a multiple of 5")
+        return value
+
+      
 
 class Inventory:
     def __init__(self):
