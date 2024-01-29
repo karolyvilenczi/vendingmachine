@@ -17,9 +17,16 @@ class Product(BaseModel):
 
     @field_validator('cost')
     @classmethod
-    def cost_must_be_a_multiple_of_5(cls, value:int) -> int:
+    def cost_must_be_a_multiple_of_5_and_valid(cls, value:int) -> int:
         if value % 5 != 0:
-            raise ValueError("Product cost must be a multiple of 5")
+            raise ValueError("Product cost must be a multiple of 5.")
+    
+        if value <= 0:
+            raise ValueError("Product cost must be greater than 0.")
+        
+        if value >= 100000:
+            raise ValueError("Product cost must be less than greater than 100000.")
+
         return value
 
       

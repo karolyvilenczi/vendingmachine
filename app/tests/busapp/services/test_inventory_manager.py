@@ -22,13 +22,16 @@ async def test_product_object_gets_created():
 
 @pytest.mark.asyncio
 @pytest.mark.xfail(reason = "Trying to create a product with cost not a multiple of 5 should fail ")
-async def test_create_product_cost_is_not_a_multiple_of_five():    
-    try:
-        test_coke = im.Product(id = 1, productName="Coke", amountAvailable=10, cost=3)
-    except ValueError as ve:
-        # applog.error(f"Could not create product: {ve=}")
-        pass
-    except Exception as e:
-        # applog.error(f"Could not create product (other exc): {e=}")
-        pass
+async def test_product_cost_must_be_a_multiple_of_5():    
+    test_coke = im.Product(id = 1, productName="Coke", amountAvailable=10, cost=3)
       
+
+@pytest.mark.asyncio
+@pytest.mark.xfail(reason = "Trying to create a product with cost less than 0 should fail.")
+async def test_product_cost_must_be_greater_than_0():    
+    test_coke = im.Product(id = 1, productName="Coke", amountAvailable=10, cost=-1)
+
+@pytest.mark.asyncio
+@pytest.mark.xfail(reason = "Trying to create a product with cost more than 100000 should fail.")
+async def test_product_cost_must_be_less_than_10000():    
+    test_coke = im.Product(id = 1, productName="Coke", amountAvailable=10, cost=1000000)
