@@ -7,6 +7,7 @@ from starlette_prometheus import metrics, PrometheusMiddleware
 
 from busapp.epserver.ep_routes import (
     r_users,
+    r_vending_machine
 )
 
 from busapp.apputils.app_logger import applog
@@ -50,6 +51,7 @@ def init_app():
     # TODO: add all the other routes
 
     app.include_router(r_users.router_users)
+    app.include_router(r_vending_machine.router_vm)
 
     return app
     # TODO: test in app created from multiple settings

@@ -4,7 +4,6 @@ Module to implement the user management functions.
 
 from busapp.apputils.app_logger import applog
 
-
 # ------------------------------------------------------
 async def get_user_list():
     applog.debug(f"Getting user list.")

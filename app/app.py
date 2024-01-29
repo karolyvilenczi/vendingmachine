@@ -2,7 +2,6 @@
 from busapp.epserver import ep_server
 from busapp.apputils.app_logger import applog
 
-
 # ---------------------------------------------------------------
 applog.debug(f"Attempting to create a FastAPI instance obj.")
 try:
@@ -11,6 +10,7 @@ try:
 except Exception as e:
     applog.error(f"Could not create FastAPI instance.")
     ep_app = None
+
 
 # ===============================================================
 if __name__ == "__main__":

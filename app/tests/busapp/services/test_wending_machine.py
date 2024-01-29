@@ -5,7 +5,7 @@ import inspect
 import pytest
 
 # from busapp.apputils import app_logger
-from busapp.services.wending_machine import VendingMachine, Item
+from busapp.services import vending_machine as vm
 
 # ------------------------------------------------------
 from busapp.apputils.app_logger import applog
@@ -13,7 +13,7 @@ from busapp.apputils.app_logger import applog
 
 @pytest.fixture(scope="session")
 def fixt_wm():
-    test_vm = VendingMachine()
+    test_vm = vm.VendingMachine()
     applog.debug(f"{test_vm} fixt created for test session.")
     yield test_vm
 

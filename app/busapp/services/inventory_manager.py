@@ -1,7 +1,7 @@
 """
 Module to implement the inventory management functions
 """
-
+from dataclasses import dataclass
 from pydantic import BaseModel
 from typing import List
 
@@ -9,47 +9,44 @@ from busapp.apputils.app_logger import applog
 
 # ------------------------------------------------------
 
-
-class Item(BaseModel):
+class Product(BaseModel):
     id: int    
-    name: str
-    price: float
-
-
-class MachineRow(BaseModel):
-    id:int
-    position: tuple
-    size: int
-
-    def __init__(self, id, position, size):
-        self.id = id
-        self.position = position
-        self.size = size
-
-    def __str__(self):
-        return f"Machine row id: {self.id} with size {self.size} possible items."
-
-    def rotate(self):
-        applog.info(f"Rotating spring id {self.id} at position: {self.position}.")
-
-
-class ItemRow(MachineRow):
-    name: str
-    occupancy: int
-
-    def __init__(self, name, occupancy):
-        self.name = name
-        self.occupancy = occupancy
-
-    def __str__(self):
-        return f"Itemrow of {self.name} filled {self.occupancy} of {super().size}"
-
+    productName: str
+    amountAvailable: int
+    cost: float # TODO:  (should be in multiples of 5)
 
 
 class Inventory:
     def __init__(self):
-        self.items = []
-        applog.info("New inventory created.")
+        self.product_list = []
+        applog.info("New empty inventory created.")
+
+    def add_product(self, product:Product):
+        self.product_list.append(product)
+
+    def get_product_by_id(self, id:int):
+        filtered = list(filter(lambda product: product.id == id, self.product_list))
+        return filtered
+    
+    def delete_product_by_id(self, product_id:int):
+        return [product for product in self.product_list if product.id != product_id]
+    
+    def delete_product_by_id(self, product_id:int):
+        return [product for product in self.product_list if product.id != product_id]
+    
+    def update_product_by_id(self, product_id, new_product_name, new_amount_available, new_cost):
+        product_to_update = self.get_product_by_id(product_id)
+        product_to_update.productName = new_product_name
+        product_to_update.amountAvailable = new_amount_available
+        product_to_update.cost = new_cost
+        # TODO: does it really udpate it? pass by ref?
+    
+        
+
+
+# TODO: add tests
+
+
 
     # def add_item(self, item: Item):
     #     self.items.append(item)
@@ -71,3 +68,35 @@ class Inventory:
     #     return len(inventory_length)
 
 # TODO: add tests
+        
+
+
+
+
+# class MachineRow(BaseModel):
+#     id:int
+#     position: tuple
+#     size: int
+
+#     def __init__(self, id, position, size):
+#         self.id = id
+#         self.position = position
+#         self.size = size
+
+#     def __str__(self):
+#         return f"Machine row id: {self.id} with size {self.size} possible items."
+
+#     def rotate(self):
+#         applog.info(f"Rotating spring id {self.id} at position: {self.position}.")
+
+
+# class ItemRow(MachineRow):
+#     name: str
+#     occupancy: int
+
+#     def __init__(self, name, occupancy):
+#         self.name = name
+#         self.occupancy = occupancy
+
+#     def __str__(self):
+#         return f"Itemrow of {self.name} filled {self.occupancy} of {super().size}"
