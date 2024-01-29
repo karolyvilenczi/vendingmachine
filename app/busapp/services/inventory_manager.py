@@ -52,36 +52,28 @@ class Product(BaseModel):
             raise ValueError(f"amountAvailable cannot be more than the machine capacity of {machine_capacity_for_product_amount}")
 
         return amountAvailable
-
-
-      
+ 
 
 class Inventory:
     def __init__(self):
         self.product_list = []
-        applog.info("New empty inventory created.")
 
-    def add_product(self, product:Product):
+    def add_product(self, product: Product):
         self.product_list.append(product)
 
-    def get_product_by_id(self, id:int):
-        filtered = list(filter(lambda product: product.id == id, self.product_list))
-        return filtered
-    
-    def delete_product_by_id(self, product_id:int):
-        return [product for product in self.product_list if product.id != product_id]
-    
-    def delete_product_by_id(self, product_id:int):
-        return [product for product in self.product_list if product.id != product_id]
-    
-    def update_product_by_id(self, product_id, new_product_name, new_amount_available, new_cost):
-        product_to_update = self.get_product_by_id(product_id)
-        product_to_update.productName = new_product_name
-        product_to_update.amountAvailable = new_amount_available
-        product_to_update.cost = new_cost
-        # TODO: does it really udpate it? pass by ref?
-    
-        
+    def get_product_by_id(self, product_id: int) -> List[Product]:
+        return [product for product in self.product_list if product.id == product_id]
+
+    def delete_product_by_id(self, product_id: int):
+        self.product_list = [product for product in self.product_list if product.id != product_id]
+
+    def update_product_by_id(self, product_id: int, new_product_name: str, new_amount_available: int, new_cost: int):
+        products_to_update = self.get_product_by_id(product_id)
+        for product in products_to_update:
+            product.productName = new_product_name
+            product.amountAvailable = new_amount_available
+            product.cost = new_cost
+
 
 
 # TODO: add tests
