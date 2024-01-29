@@ -15,10 +15,12 @@ from busapp.apputils.app_logger import applog
 
 # --------------------------------------------------------------
 def init_app():
-    """Initialize the core application."""
-    # TODO: add try-c parts to handle exceptions
+    """
+    Initialize the core FastAPI application.
+    """
+    
     app = FastAPI(
-        # TODO: move to ext. config
+        
         title="Wending machine app",  # FIX
         description="Part of the interview process for Oliver Wynman",  # FIX
         version="0.0.1",
@@ -33,15 +35,14 @@ def init_app():
             "url": "https://www.apache.org/licenses/LICENSE-2.0.html",
         },
     )
-    # TODO: make conditional from env
-    applog.debug(f"FastAPI main instance created: {app}")
+    
+    applog.success(f"FastAPI main instance created: {app}")
 
     # adding prometheus
     app.add_middleware(PrometheusMiddleware)
     app.add_route("/metrics", metrics)
 
-    # adding cors
-    # TODO: turn on / off by config
+    # adding cors    
     app.add_middleware(
         CORSMiddleware,
         allow_origins=["*"],
@@ -49,14 +50,13 @@ def init_app():
         allow_methods=["*"],
         allow_headers=["*"],
     )
-    # TODO: add all the other routes
-
+    
+    # adding the service routes
     app.include_router(r_users.router_users)
     app.include_router(r_products.router_products)
     app.include_router(r_vending_machine.router_vm)
 
-    return app
-    # TODO: test in app created from multiple settings
+    return app    
 
 
 # ===============================================================

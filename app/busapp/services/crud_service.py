@@ -5,13 +5,15 @@ from typing import Type, List, TypeVar, Generic
 
 from busapp.apputils.app_logger import applog
 
-
 ModelType = TypeVar("ModelType", bound=BaseModel)
 
 class CRUDService(Generic[ModelType]):
     def __init__(self, model: Type[ModelType]):
         self.model = model
+        
+        # TODO: make this an sqlite db
         self.database = []
+        
         self.current_id = 1  # Initial ID value
 
     def create(self, item: ModelType):
@@ -21,7 +23,7 @@ class CRUDService(Generic[ModelType]):
         created_item = self.model(**item_dict)
         self.database.append(created_item)
 
-        applog.debug(created_item)
+        # applog.debug(created_item)
         return created_item
 
     def get(self, item_id: int) -> ModelType:
@@ -33,6 +35,10 @@ class CRUDService(Generic[ModelType]):
 
     def get_all(self) -> List[ModelType]:
         return self.database
+    
+    def get_database_in_dict(self) -> List[ModelType]:
+        return [item.model_dump() for item in self.database]
+        
 
     def update(self, item_id: int, updated_item: ModelType) -> ModelType:
         item = next((i for i in self.database if i.id == item_id), None)
