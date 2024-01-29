@@ -18,37 +18,32 @@ def inventory_with_products():
     return inventory
 
 
-def test_empty_inventory_creation(empty_inventory):
+def test_inventory_create_empty(empty_inventory):
     assert len(empty_inventory.product_list) == 0
 
 
-def test_add_product(empty_inventory):
+def test_inventory_add_product(empty_inventory):
     product = Product(id=1, productName='Product1', amountAvailable=10, cost=20)
     empty_inventory.add_product(product)
     assert len(empty_inventory.product_list) == 1
     assert empty_inventory.product_list[0] == product
 
 
-def test_get_product_by_id(inventory_with_products):
+def test_inventory_get_product_by_id(inventory_with_products):
     result = inventory_with_products.get_product_by_id(1)
     assert len(result) == 1
     assert result[0].id == 1
 
 
-def test_delete_product_by_id(inventory_with_products):
+def test_inventory_delete_product_by_id(inventory_with_products):
     inventory_with_products.delete_product_by_id(1)
     assert len(inventory_with_products.product_list) == 1
     assert inventory_with_products.get_product_by_id(1) == []
 
 
-def test_update_product_by_id(inventory_with_products):
+def test_inventory_update_product_by_id(inventory_with_products):
     inventory_with_products.update_product_by_id(1, 'UpdatedProduct', 15, 25)
     updated_product = inventory_with_products.get_product_by_id(1)[0]
     assert updated_product.productName == 'UpdatedProduct'
     assert updated_product.amountAvailable == 15
     assert updated_product.cost == 25
-
-
-# def test_invalid_cost_product():
-#     with pytest.raises(ValueError, match="Cost must be a multiple of 5"):
-#         Product(id=1, productName='InvalidProduct', amountAvailable=10, cost=17)
