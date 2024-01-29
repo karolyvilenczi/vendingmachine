@@ -6,8 +6,8 @@ from pydantic import BaseModel, field_validator
 from busapp.apputils.app_logger import applog
 
 # ------------------------------------------------------
-class Product(BaseModel):
-    id: int    
+class ProductWoID(BaseModel):
+      
     productName: str
     amountAvailable: int
     cost: int
@@ -49,4 +49,9 @@ class Product(BaseModel):
             raise ValueError(f"amountAvailable cannot be more than the machine capacity of {machine_capacity_for_product_amount}")
 
         return amountAvailable
+    
+
+
+class Product(ProductWoID):
+    id: int  
  

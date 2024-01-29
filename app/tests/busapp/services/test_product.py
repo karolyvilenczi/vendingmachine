@@ -1,10 +1,7 @@
 import pytest
 
-from busapp.services.inventory_manager import Product
-
-# ------------------------------------------------------
+from busapp.services.models.product import Product
 from busapp.apputils.app_logger import applog
-
 
 # ------------------------------------------------------
 
