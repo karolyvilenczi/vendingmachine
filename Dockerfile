@@ -24,8 +24,8 @@ USER ${USER_NAME}
 RUN mkdir -p /home/${USER_NAME}/app && chown ${USER_ID}:${GROUP_ID} /home/${USER_NAME}/app 
 WORKDIR /home/${USER_NAME}/app
 
-#ENV PATH=/home/"${USER_NAME}"/.local/bin:$PATH
-#RUN echo $PATH
+ENV PATH=/home/"${USER_NAME}"/.local/bin:$PATH
+RUN echo $PATH
 
 #COPY --chown=${USER_ID}:${GROUP_ID} app/* app/
 #COPY app/* app/

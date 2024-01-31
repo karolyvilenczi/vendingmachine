@@ -39,26 +39,21 @@ class CRUDService(Generic[ModelType]):
     def get_all(self) -> List[ModelType]:
         return self.database
     
-    def get_count_of(
-            self, 
-            key_name:str, 
-            value_name:str = "",
-            sum_field_name:str = ""
-            ) -> List[Dict]:
+    def get_count_of(self, key_name:str, value_name:str="", sum_field_name:str="") -> List[Dict]:
         # e.g. for product: get count of productName or sellerid        
         # e.g. for user: get count of role buyer
+
+        print(f"{key_name=}, {sum_field_name=}")
         
         items_w_key_name_found = [dict(item) for item in self.database if (key_name in item.__annotations__)]
         items_df = DataFrame(items_w_key_name_found)
-
-        # Count occurrences of each product
-        iten_counts = items_df[key_name].value_counts().to_dict()
-
-        # Sum 'amount' values for each product
-        items_sums_by_a_different_field = items_df.groupby(key_name)[sum_field_name].sum().to_dict()      
+       
+        items_sums = items_df.groupby(key_name)[sum_field_name].sum().to_dict()      
+        if value_name:
+            return items_sums.get(value_name, 0)
         
+        return(items_sums)
         
-        return(items_sums_by_a_different_field)
         
     
     def get_database_in_dict(self) -> List[ModelType]:
