@@ -2,6 +2,7 @@ from fastapi import HTTPException
 from fastapi.encoders import jsonable_encoder
 from pydantic import BaseModel
 from collections import Counter
+from pandas import DataFrame 
 from typing import Type, List, Dict, Optional, TypeVar, Generic
 
 # from busapp.services.models.product import ProductWoID, Product
@@ -41,18 +42,23 @@ class CRUDService(Generic[ModelType]):
     def get_count_of(
             self, 
             key_name:str, 
-            value_name:str = ""
+            value_name:str = "",
+            sum_field_name:str = ""
             ) -> List[Dict]:
-        # e.g. for product: get count of productName or sellerid
+        # e.g. for product: get count of productName or sellerid        
         # e.g. for user: get count of role buyer
         
         items_w_key_name_found = [dict(item) for item in self.database if (key_name in item.__annotations__)]
-        item_counts = Counter( [item[key_name] for item in items_w_key_name_found] )
-                
-        if value_name:
-            item_counts = item_counts.get(value_name, 0)
+        items_df = DataFrame(items_w_key_name_found)
+
+        # Count occurrences of each product
+        iten_counts = items_df[key_name].value_counts().to_dict()
+
+        # Sum 'amount' values for each product
+        items_sums_by_a_different_field = items_df.groupby(key_name)[sum_field_name].sum().to_dict()      
         
-        return(item_counts)
+        
+        return(items_sums_by_a_different_field)
         
     
     def get_database_in_dict(self) -> List[ModelType]:

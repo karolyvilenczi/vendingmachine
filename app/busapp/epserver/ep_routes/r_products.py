@@ -15,7 +15,7 @@ router_products = APIRouter(prefix="/products")
 
 @router_products.get("/stats/")
 async def get_count_of():
-    return crud_service_product.get_count_of(key_name="productName")
+    return crud_service_product.get_count_of(key_name="productName", sum_field_name="amount")
 
 @router_products.get("/stats/{product_name}")
 async def get_count_of(product_name:Optional[str]=""):
