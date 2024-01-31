@@ -13,9 +13,6 @@ router_users = APIRouter(prefix="/users")
 
 # ------------------------------------------------------
 
-@router_users.get("/stats")
-async def get_count_of():
-    return crud_service_user.get_count_of(key_name="role")
 
 @router_users.post("/", response_model=User)
 async def create_user(user: UserResponse):
