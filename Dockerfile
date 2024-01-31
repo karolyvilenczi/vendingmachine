@@ -1,6 +1,6 @@
 FROM python:3.11-slim-buster
 
-RUN apt-get update && apt-get -y install graphviz graphviz-dev 
+RUN apt-get update && apt-get -y upgrade
 
 COPY requirements.txt .
 RUN pip install --upgrade pip && pip install -r requirements.txt && pip cache purge
@@ -24,5 +24,10 @@ USER ${USER_NAME}
 RUN mkdir -p /home/${USER_NAME}/app && chown ${USER_ID}:${GROUP_ID} /home/${USER_NAME}/app 
 WORKDIR /home/${USER_NAME}/app
 
+#ENV PATH=/home/"${USER_NAME}"/.local/bin:$PATH
+#RUN echo $PATH
 
-COPY --chown=${USER_ID}:${GROUP_ID} app/* app/
+#COPY --chown=${USER_ID}:${GROUP_ID} app/* app/
+#COPY app/* app/
+
+
