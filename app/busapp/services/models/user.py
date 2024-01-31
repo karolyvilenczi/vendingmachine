@@ -7,9 +7,12 @@ from busapp.apputils.app_logger import applog
 
 # ------------------------------------------------------
 
-class UserWoId(BaseModel):    
+class User(BaseModel):    
     name: str
     role: str
-
-class User(UserWoId):    
     id:int
+
+class UserResponse(BaseModel):    
+    name: str
+    role: str
+    

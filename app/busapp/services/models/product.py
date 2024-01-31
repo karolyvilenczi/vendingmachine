@@ -3,14 +3,17 @@
 Module to implement the product management functions
 """
 from pydantic import BaseModel, field_validator
+from typing import Optional
 from busapp.apputils.app_logger import applog
 
 # ------------------------------------------------------
-class ProductWoID(BaseModel):
+class Product(BaseModel):
       
-    productName: str
-    amountAvailable: int
+    productName: str    
+    amount: int
     cost: int
+    sellerId: int
+    id : Optional[int] = 0
 
     @field_validator('cost')
     @classmethod
@@ -38,20 +41,25 @@ class ProductWoID(BaseModel):
         return productName
     
 
-    @field_validator('amountAvailable')
+    @field_validator('amount')
     @classmethod
-    def amountAvailable_cannot_be_negative(cls, amountAvailable:int) -> int:
-        if amountAvailable < 0:
-            raise ValueError("amountAvailable cannot be negative.")
+    def amount_cannot_be_negative(cls, amount:int) -> int:
+        if amount < 0:
+            raise ValueError("amount cannot be negative.")
     
         machine_capacity_for_product_amount = 100 # TODO: put this to a config
-        if amountAvailable > machine_capacity_for_product_amount:
-            raise ValueError(f"amountAvailable cannot be more than the machine capacity of {machine_capacity_for_product_amount}")
+        if amount > machine_capacity_for_product_amount:
+            raise ValueError(f"amount cannot be more than the machine capacity of {machine_capacity_for_product_amount}")
 
-        return amountAvailable
+        return amount
     
 
 
-class Product(ProductWoID):
-    id: int  
+# # useful as a response model and for checking if available
+class ProductResponse(BaseModel):
+    productName: str    
+    amount: int
+    cost: int
+    id: int
+    
  

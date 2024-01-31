@@ -1,7 +1,10 @@
 from fastapi import HTTPException
 from fastapi.encoders import jsonable_encoder
 from pydantic import BaseModel
-from typing import Type, List, TypeVar, Generic
+from collections import Counter
+from typing import Type, List, Dict, Optional, TypeVar, Generic
+
+# from busapp.services.models.product import ProductWoID, Product
 
 from busapp.apputils.app_logger import applog
 
@@ -11,19 +14,18 @@ class CRUDService(Generic[ModelType]):
     def __init__(self, model: Type[ModelType]):
         self.model = model
         
-        # TODO: make this an sqlite db
-        self.database = []
+        self.database = list()        
+        # self.inventory:List[Dict] = list()
+        self.current_id = 1        
         
-        self.current_id = 1  # Initial ID value
 
     def create(self, item: ModelType):
         item_dict = jsonable_encoder(item)
         item_dict["id"] = self.current_id
         self.current_id += 1
         created_item = self.model(**item_dict)
-        self.database.append(created_item)
-
-        # applog.debug(created_item)
+        self.database.append(created_item)        
+        
         return created_item
 
     def get(self, item_id: int) -> ModelType:
@@ -35,6 +37,23 @@ class CRUDService(Generic[ModelType]):
 
     def get_all(self) -> List[ModelType]:
         return self.database
+    
+    def get_count_of(
+            self, 
+            key_name:str, 
+            value_name:str = ""
+            ) -> List[Dict]:
+        # e.g. for product: get count of productName or sellerid
+        # e.g. for user: get count of role buyer
+        
+        items_w_key_name_found = [dict(item) for item in self.database if (key_name in item.__annotations__)]
+        item_counts = Counter( [item[key_name] for item in items_w_key_name_found] )
+                
+        if value_name:
+            item_counts = item_counts.get(value_name, 0)
+        
+        return(item_counts)
+        
     
     def get_database_in_dict(self) -> List[ModelType]:
         return [item.model_dump() for item in self.database]

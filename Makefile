@@ -34,6 +34,10 @@ run_rm_it_bash:
 	--mount type=bind,source=$$(pwd)/app,target=/home/$(APP_USER_NAME)/app \
 	$(IMG_NAME) /bin/bash
 
+# Enter
+enter_bash:
+	docker exec -it $(CONT_NAME) bash
+
 # Checks
 run_mypy:
 	docker exec -it $(CONT_NAME) mypy --show-column-numbers --explicit-package-bases .
