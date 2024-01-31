@@ -8,6 +8,7 @@ from starlette_prometheus import metrics, PrometheusMiddleware
 from busapp.epserver.ep_routes import (
     r_users,
     r_products, 
+    r_money,
     r_vending_machine
 )
 
@@ -19,21 +20,19 @@ def init_app():
     Initialize the core FastAPI application.
     """
     
-    app = FastAPI(
-        
+    app = FastAPI(        
         title="Wending machine app",  # FIX
         description="Part of the interview process for Oliver Wynman",  # FIX
         version="0.0.1",
         terms_of_service="http://example.com/terms/",  # FIX
         contact={
             "name": "Charles Vilenczi",
-            "url": "my url",  # FIX
             "email": "mail@mail.com",  # FIX
         },
         license_info={
             "name": "Apache 2.0",
             "url": "https://www.apache.org/licenses/LICENSE-2.0.html",
-        },
+        }
     )
     
     applog.success(f"FastAPI main instance created: {app}")
@@ -54,7 +53,10 @@ def init_app():
     # adding the service routes
     app.include_router(r_users.router_users)
     app.include_router(r_products.router_products)
+    app.include_router(r_money.router_money)
     app.include_router(r_vending_machine.router_vm)
+
+    
 
     return app    
 

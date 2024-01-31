@@ -16,7 +16,7 @@ run_rm_it_ep:
 	docker run -it --rm --network host \
 	--name $(CONT_NAME) \
 	--mount type=bind,source=$$(pwd)/app,target=/home/$(APP_USER_NAME)/app \
-	$(IMG_NAME) /bin/bash -c "uvicorn app:ep_app --host 127.0.0.1 --port 8000 --log-level debug --use-colors --reload"
+	$(IMG_NAME) /bin/bash -c "uvicorn app:ep_app --proxy-headers --host 0.0.0.0 --port 8000 --log-level debug --use-colors --reload"
 
 
 run_rm_d_app:

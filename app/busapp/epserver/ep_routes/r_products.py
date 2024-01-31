@@ -2,13 +2,14 @@ from fastapi import APIRouter
 
 from busapp.apputils.app_logger import applog
 
-from busapp.services.crud_service import CRUDService
+from busapp.services.crud_service import CRUDService, ProdCRUDService
 from busapp.services.models.product import Product, ProductResponse
 from typing import List, Optional
 
 # ------------------------------------------------------
 
-crud_service_product = CRUDService[Product](Product)
+# crud_service_product = CRUDService[Product](Product)
+crud_service_product = ProdCRUDService(Product)
 router_products = APIRouter(prefix="/products")
 
 # ------------------------------------------------------
