@@ -64,28 +64,75 @@ class CRUDService(Generic[ModelType]):
         else:
             raise HTTPException(status_code=404, detail=f"{self.model.__name__} not found")
         
+    def delete_all(self) -> bool:
+        """
+            Resets the database to an empty list
+        """
+        self.database = []
+        return True
+        
 
 
 class ProdCRUDService(CRUDService[Product]):
-    def get_count_of(self, key_name:str, value_name:str="", sum_field_name:str="") -> List[Dict]:
+
+    def __init__(self, model: type[Product]):
+        super().__init__(model)
+    
+    def get_count_of(self, product_name:str="", sum_field_name:str="") -> List[Dict]:
         # e.g. for product: get count of productName or sellerid        
         # e.g. for user: get count of role buyer
-
-        print(f"{key_name=}, {sum_field_name=}")
-        
-        items_w_key_name_found = [dict(item) for item in self.database if (key_name in item.__annotations__)]
-        items_df = DataFrame(items_w_key_name_found)
+  
+        products = [dict(item) for item in self.database if ("productName" in item.__annotations__)]
+        products_df = DataFrame(products)
        
-        items_sums = items_df.groupby(key_name)[sum_field_name].sum().to_dict()      
-        if value_name:
-            return items_sums.get(value_name, 0)
+        items_sums = products_df.groupby("productName")[sum_field_name].sum().to_dict()      
+        if product_name:
+            return items_sums.get(product_name, 0)
         
         return(items_sums)
     
 
 class UserCRUDService(CRUDService[User]):
-    pass
+    
+    def __init__(self, model: type[User]):
+        super().__init__(model)
+
+    
 
 
 class MoneyCRUDService(CRUDService[Coin]):
-    pass
+
+    def __init__(self, model: type[Coin]):
+        super().__init__(model)
+
+    def get_all(self):
+        return super().get_all()
+    
+    def get_sum(self):
+        applog.debug("getting sum entered")
+
+        coins_from_db_as_dicts = [dict(coin) for coin in self.database]
+        coins_df = DataFrame(coins_from_db_as_dicts)
+        applog.debug(coins_df)
+
+       
+        entered_coins_sum = int(coins_df["face_value"].sum())
+        
+        resp = {
+            'entered_sum':entered_coins_sum
+        }      
+       
+        return(resp)
+    
+    def delete_all(self):
+        
+        resp = {
+            "Sum cleared":super().delete_all()
+        }
+        return resp
+       
+
+        
+
+    
+    
