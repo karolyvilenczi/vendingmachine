@@ -42,11 +42,3 @@ async def set_state(state:MachineState):
         
     return {"state":vm.state.value}
 
-
-# @router_users.post("/users/", response_model=User)
-# async def create_user(userwoid: UserWoId):
-#     return crud_service_user.create(userwoid)
-
-# @router_vm.post("/machine/state/")
-# async def change_state_to(desired_state:str):
-    

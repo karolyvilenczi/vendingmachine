@@ -13,9 +13,16 @@ router_money = APIRouter(prefix="/money")
 
 # ------------------------------------------------------
 
-@router_money.post("/", response_model=Coin)
+@router_money.post("/deposit", response_model=Coin)
 async def add_coin(coin: Coin):
     return crud_service_money.create(coin)
+
+
+@router_money.post("/tresor", response_model=Dict)
+async def add_sum_to_tresor(sum:int):
+    # TODO: # some method to save to the VM tresor
+    # return crud_service_money.create(coin)
+    pass
 
 
 @router_money.get("/sum",response_model=Dict)

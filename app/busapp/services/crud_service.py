@@ -133,6 +133,3 @@ class MoneyCRUDService(CRUDService[Coin]):
        
 
         
-
-    
-    
