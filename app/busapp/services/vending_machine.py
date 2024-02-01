@@ -89,11 +89,13 @@ class VendingMachine(Machine):
         
     def machine_initial_setup(
             self, 
-            funds=100, # TODO: add coin management,now this is just funds
-            inventory = 20 #TODO get this from inventory mgmt
+            funds=100, 
+            inventory = [],
+            users = []
         ):
         self.funds = funds
         self.inventory = inventory
+        self.users = users
         applog.success(f"Initial setup: {self.funds=}, {self.inventory=}")
         
 

@@ -45,5 +45,10 @@ async def set_state(state:MachineState):
 
 @router_vm.get("/state")
 async def get_current_state():
-            
     return {"current_state":vm.state.value}
+
+
+@router_vm.get("/users")
+async def get_current_state():
+            
+    return {"current_users":vm.users}

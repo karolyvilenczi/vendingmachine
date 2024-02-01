@@ -78,18 +78,23 @@ class ProdCRUDService(CRUDService[Product]):
     def __init__(self, model: type[Product]):
         super().__init__(model)
     
-    def get_count_of(self, product_name:str="", sum_field_name:str="") -> List[Dict]:
+    def get_count_of(self, product_name:str="", sum_field_name:str="") -> Optional[List[Dict]]:
         # e.g. for product: get count of productName or sellerid        
         # e.g. for user: get count of role buyer
   
         products = [dict(item) for item in self.database if ("productName" in item.__annotations__)]
-        products_df = DataFrame(products)
+        if products:
+            products_df = DataFrame(products)
        
-        items_sums = products_df.groupby("productName")[sum_field_name].sum().to_dict()      
-        if product_name:
-            return items_sums.get(product_name, 0)
+            items_sums = products_df.groupby("productName")[sum_field_name].sum().to_dict()      
+
+            applog.debug(items_sums)
+            if product_name:
+                return items_sums.get(product_name, 0)
+            return(items_sums)
+        else:
+            return {"error": "empty inventory"}
         
-        return(items_sums)
     
 
 class UserCRUDService(CRUDService[User]):
@@ -97,7 +102,7 @@ class UserCRUDService(CRUDService[User]):
     def __init__(self, model: type[User]):
         super().__init__(model)
 
-    
+        
 
 class MoneyCRUDService(CRUDService[Coin]):
 
