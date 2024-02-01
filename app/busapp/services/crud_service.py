@@ -113,8 +113,6 @@ class MoneyCRUDService(CRUDService[Coin]):
 
         coins_from_db_as_dicts = [dict(coin) for coin in self.database]
         coins_df = DataFrame(coins_from_db_as_dicts)
-        applog.debug(coins_df)
-
        
         entered_coins_sum = int(coins_df["face_value"].sum())
         
@@ -124,12 +122,9 @@ class MoneyCRUDService(CRUDService[Coin]):
        
         return(resp)
     
-    def delete_all(self):
-        
+    def delete_all(self):        
         resp = {
             "Sum cleared":super().delete_all()
         }
         return resp
        
-
-        

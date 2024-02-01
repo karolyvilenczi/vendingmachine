@@ -2,9 +2,12 @@
 from busapp.epserver import ep_server
 from busapp.apputils.app_logger import applog
 
+# from busapp.services.vending_machine import VendingMachine
+
 # ---------------------------------------------------------------
 applog.debug(f"Attempting to create a FastAPI instance obj.")
 try:
+    
     ep_app = ep_server.init_app()
     
 except Exception as e:

@@ -4,17 +4,15 @@ Module to implement the actual wending machine logic.
 
 import enum
 from typing import List
-from pydantic import BaseModel
 
 from transitions import Machine
 
 # from busapp.apputils.app_logger import applog
-from . import (
-    maintenance    
-)
+from . import  maintenance
 
 from busapp.apputils.app_logger import applog
 # ------------------------------------------------------
+
 
 
 class States(enum.Enum):
@@ -24,7 +22,25 @@ class States(enum.Enum):
     DAMAGED = "damaged"
 
 class VendingMachine(Machine):
-    def __init__(self):        
+    
+    # Impl. a singleton pattern
+    _instance = None
+
+    def __new__(cls, *args, **kwargs):
+        if not cls._instance:
+            cls._instance = super(VendingMachine, cls).__new__(cls)
+        return cls._instance
+
+
+    def __init__(
+            self, 
+            # value
+            ):
+
+        if not hasattr(self, 'initialized'):            
+            # self.value = value
+            self.initialized = True        
+        
         self.machine_initial_setup()   
         
         Machine.__init__(self, states=States, initial=States.MAINTENANCE)

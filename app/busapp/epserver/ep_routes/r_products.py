@@ -2,7 +2,7 @@ from fastapi import APIRouter
 
 from busapp.apputils.app_logger import applog
 
-from busapp.services.crud_service import CRUDService, ProdCRUDService
+from busapp.services.crud_service import ProdCRUDService
 from busapp.services.models.product import Product, ProductResponse
 from typing import List, Optional
 
