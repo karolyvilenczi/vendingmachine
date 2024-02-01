@@ -18,7 +18,7 @@ from pprint import pprint as pp
 global vm
 vm = VendingMachine()
   
-router_vm = APIRouter()
+router_vm = APIRouter(prefix="/machine")
 
 # ------------------------------------------------------
 @router_vm.post("/state")
@@ -40,4 +40,10 @@ async def set_state(state:MachineState):
             applog.error(err_msg)
             raise HTTPException(status_code=500, detail=err_msg)
         
-    return {"state":vm.state.value}
+    return {"current_state":vm.state.value}
+
+
+@router_vm.get("/state")
+async def get_current_state():
+            
+    return {"current_state":vm.state.value}
