@@ -11,7 +11,7 @@ WIP
 
 Once running, Swagger is available on: http://localhost:8000/docs
 
-The machine is based on FastAPI and a FSM based on transitions.
+The machine is based on FastAPI and a FSM from transitions.
 
 https://fastapi.tiangolo.com/
 
