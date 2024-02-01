@@ -48,6 +48,49 @@ def front_door_is_locked():
     return True
 
 
+def coin_is_valid():
+    """
+        Checks if the coin inserted is in fact a coin and is valid.
+    """
+    applog.debug("Checking if coin inserted is valid.")
+    # ACTUAL CHECK NOT IMPLEMENTED
+    return True
+
+
+def open_tresor_bay():
+    """"
+    Opens the tresor bay at the end of sale
+    """
+    applog.debug("Opening the tresor bay at the end of sale")
+    # ACTUAL ACTION NOT IMPLEMENTED
+    return True
+
+def save_coins_to_tresor_bay():
+    """"
+    Saves coin to the bay.
+    """
+    applog.debug("Saved coin to the bay.")
+    # ACTUAL ACTION NOT IMPLEMENTED
+    return True
+    
+def close_tresor_bay():
+    """"
+    Closes the tresor bay at the end of sale
+    """
+    applog.debug("Closing the tresor bay at the end of sale")
+    # ACTUAL ACTION NOT IMPLEMENTED
+    return True
+
+
+
+def return_all_coins_to_return_bay():
+    """"
+    Reurns all coins to the return bay
+    """
+    applog.debug("Returned all coins to the return bay")
+    # ACTUAL ACTION NOT IMPLEMENTED
+    return True
+
 # etc.
 
 

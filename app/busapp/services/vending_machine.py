@@ -59,7 +59,32 @@ class VendingMachine(Machine):
             source='*', 
             dest = States.MAINTENANCE, 
             after=self.activate_maintenance_mode
-        )           
+        )    
+
+        # from READY -> SELLING
+        self.add_transition(
+            trigger='coin_inserted', 
+            source=[States.READY,States.SELLING],
+            dest = States.SELLING,
+            after=self.check_if_coin_is_valid
+        )         
+
+        # from SELLING -> READY
+        self.add_transition(
+            trigger='move_coins_to_tresor',
+            source=States.SELLING,
+            dest = States.READY,
+            after=self.check_if_coins_saved_to_tresor
+        )
+
+        # from SELLING -> READY
+        self.add_transition(
+            trigger='press_reset',
+            source=States.SELLING,
+            dest = States.READY,
+            after=self.return_all_coins_to_return_bay
+        )
+        
 
         
     def machine_initial_setup(
@@ -95,16 +120,33 @@ class VendingMachine(Machine):
             maintenance.open_front_door(),
             maintenance.open_tresor()            
         ]
-        # return True if all(init_checklist) else False
-        return True
+        return True if all(maint_mode_activities) else False
+        
+    
+    def check_if_coin_is_valid(self):
+        return maintenance.coin_is_valid()
+    
+    def check_if_coins_saved_to_tresor(self):
+        saving_money_to_tresor_activities = [
+            maintenance.open_tresor_bay(),
+            maintenance.save_coins_to_tresor_bay(),
+            maintenance.close_tresor_bay()
+        ]
+    
+        return True if all(saving_money_to_tresor_activities) else False
+
 
          
     def get_current_funds(self): 
         return f"Current funds: {self.funds}"
 
 
-    def get_current_state(self): 
-        return self.get_model_state()
+    def  return_all_coins_to_return_bay(self):
+        return maintenance.return_all_coins_to_return_bay()
+
+
+    # def get_current_state(self): 
+    #     return self.get_model_state()
 
 
 # ===============================================================

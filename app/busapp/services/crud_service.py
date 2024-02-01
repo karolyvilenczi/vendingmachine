@@ -99,7 +99,6 @@ class UserCRUDService(CRUDService[User]):
 
     
 
-
 class MoneyCRUDService(CRUDService[Coin]):
 
     def __init__(self, model: type[Coin]):
@@ -127,4 +126,10 @@ class MoneyCRUDService(CRUDService[Coin]):
             "Sum cleared":super().delete_all()
         }
         return resp
+    
+    def save_to_tresor(self, amount):
+        applog.info(f"The sales amount of {amount} cents was sent to the tresor")
+        
        
+    def calculate_the_return(self):
+        pass
